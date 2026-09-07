@@ -5,7 +5,7 @@
 // Lưu ý: chức năng này CHỈ hoạt động khi deploy qua Vercel (hoặc nền tảng có hỗ trợ serverless function).
 // GitHub Pages là hosting tĩnh, không chạy được file này.
 
-const GEMINI_MODEL = "gemini-2.0-flash"; // nằm trong danh sách model miễn phí của Gemini API
+const GEMINI_MODEL = "gemini-3.6-flash"; // model miễn phí hiện tại của Gemini API
 
 export default async function handler(req, res) {
   if (req.method !== "POST") {
