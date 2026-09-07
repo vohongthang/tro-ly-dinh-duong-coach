@@ -141,7 +141,7 @@ export default function App() {
 
   // ---------- Màn hình chính ----------
   return (
-    <div className="min-h-screen bg-stone-50 pb-16">
+    <div className="min-h-screen bg-stone-50 pb-16 overflow-x-hidden">
       <div className="bg-emerald-700 text-white px-4 sm:px-6 py-5">
         <div className="max-w-3xl mx-auto flex items-center justify-between">
           <div>

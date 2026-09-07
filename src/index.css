@@ -4,4 +4,16 @@
 
 html, body, #root {
   height: 100%;
+  overflow-x: hidden;
+  width: 100%;
+}
+
+/* Tránh input[type=date] mặc định của một số trình duyệt mobile ép độ rộng vượt khung, gây tràn lề ngang */
+input[type="date"] {
+  max-width: 100%;
+  min-width: 0;
+}
+
+* {
+  min-width: 0;
 }

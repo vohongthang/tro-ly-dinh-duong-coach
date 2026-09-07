@@ -26,16 +26,16 @@ export default function MealLog({ meals, highRisk, onOpenModal, onRemoveFood }) 
             ) : (
               <div className="space-y-1.5">
                 {items.map((item) => (
-                  <div key={item.id} className="flex items-center justify-between text-sm bg-stone-50 rounded-lg px-3 py-2">
-                    <div className="flex items-center gap-1.5">
+                  <div key={item.id} className="flex items-center justify-between text-sm bg-stone-50 rounded-lg px-3 py-2 gap-2">
+                    <div className="flex items-center gap-1.5 min-w-0">
                       {item.caution && highRisk && <AlertTriangle size={13} className="text-amber-500 shrink-0" />}
-                      <span>
+                      <span className="min-w-0 break-words">
                         <span className="font-medium text-stone-700">{item.name}</span>
                         <span className="text-stone-400 text-xs ml-1.5">{item.grams}g</span>
                       </span>
                     </div>
-                    <div className="flex items-center gap-3">
-                      <span className="text-xs text-stone-500">{fmt(item.kcal)} kcal</span>
+                    <div className="flex items-center gap-3 shrink-0">
+                      <span className="text-xs text-stone-500 whitespace-nowrap">{fmt(item.kcal)} kcal</span>
                       <button onClick={() => onRemoveFood(meal.key, item.id)} className="text-stone-300 hover:text-red-500">
                         <Trash2 size={14} />
                       </button>

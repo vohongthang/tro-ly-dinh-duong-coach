@@ -16,7 +16,7 @@ export default function MacroDashboard({ profile, totals }) {
   return (
     <div className="bg-white rounded-2xl border border-stone-200 shadow-sm p-5 sm:p-6">
       <div className="flex flex-col sm:flex-row sm:items-center gap-6">
-        <div className="flex items-center gap-4 shrink-0">
+        <div className="flex items-center gap-4 shrink-0 min-w-0">
           <svg width="96" height="96" viewBox="0 0 96 96" className="shrink-0">
             <circle cx="48" cy="48" r="42" fill="none" stroke="#E7E5E4" strokeWidth="10" />
             <circle
@@ -27,14 +27,14 @@ export default function MacroDashboard({ profile, totals }) {
               transform="rotate(-90 48 48)"
             />
           </svg>
-          <div>
-            <div className={`text-2xl font-bold ${overBudget ? "text-red-600" : "text-emerald-700"}`}>{fmt(totals.kcal)}</div>
-            <div className="text-xs text-stone-500">/ {fmt(profile.target)} kcal mục tiêu</div>
-            {overBudget && <div className="text-xs font-medium text-red-600 mt-0.5">Vượt {fmt(totals.kcal - profile.target)} kcal</div>}
-            <div className="text-[11px] text-stone-400 mt-1 max-w-[180px]">Vòng tròn thể hiện % Calo đã nạp so với mục tiêu hôm nay — đầy xanh là vừa đủ, chuyển đỏ là đã vượt.</div>
+          <div className="min-w-0">
+            <div className={`text-2xl font-bold break-words ${overBudget ? "text-red-600" : "text-emerald-700"}`}>{fmt(totals.kcal)}</div>
+            <div className="text-xs text-stone-500 break-words">/ {fmt(profile.target)} kcal mục tiêu</div>
+            {overBudget && <div className="text-xs font-medium text-red-600 mt-0.5 break-words">Vượt {fmt(totals.kcal - profile.target)} kcal</div>}
+            <div className="text-[11px] text-stone-400 mt-1 max-w-[180px] break-words">Vòng tròn thể hiện % Calo đã nạp so với mục tiêu hôm nay — đầy xanh là vừa đủ, chuyển đỏ là đã vượt.</div>
           </div>
         </div>
-        <div className="flex-1 grid grid-cols-1 gap-3">
+        <div className="flex-1 grid grid-cols-1 gap-3 min-w-0">
           {macroRows.map((m) => {
             const Icon = m.icon;
             const pct = Math.min(100, (m.current / m.target) * 100);
@@ -53,21 +53,21 @@ export default function MacroDashboard({ profile, totals }) {
           })}
         </div>
       </div>
-      <div className="grid grid-cols-3 gap-3 mt-5 pt-4 border-t border-stone-100 text-center">
-        <div>
+      <div className="grid grid-cols-3 gap-2 sm:gap-3 mt-5 pt-4 border-t border-stone-100 text-center">
+        <div className="min-w-0">
           <div className="text-sm font-semibold text-stone-800">{profile.bmr}</div>
           <div className="text-[11px] text-stone-500">BMR (kcal)</div>
-          <div className="text-[10px] text-stone-400 mt-0.5">Năng lượng cơ thể cần khi nghỉ hoàn toàn</div>
+          <div className="text-[9px] sm:text-[10px] text-stone-400 mt-0.5 break-words leading-tight">Năng lượng cần khi nghỉ</div>
         </div>
-        <div>
+        <div className="min-w-0">
           <div className="text-sm font-semibold text-stone-800">{profile.tdee}</div>
           <div className="text-[11px] text-stone-500">TDEE (kcal)</div>
-          <div className="text-[10px] text-stone-400 mt-0.5">Tổng năng lượng tiêu hao cả ngày</div>
+          <div className="text-[9px] sm:text-[10px] text-stone-400 mt-0.5 break-words leading-tight">Tổng năng lượng cả ngày</div>
         </div>
-        <div>
+        <div className="min-w-0">
           <div className="text-sm font-semibold text-stone-800">{profile.pal}</div>
           <div className="text-[11px] text-stone-500">Hệ số PAL</div>
-          <div className="text-[10px] text-stone-400 mt-0.5">Mức vận động bạn đã chọn</div>
+          <div className="text-[9px] sm:text-[10px] text-stone-400 mt-0.5 break-words leading-tight">Mức vận động đã chọn</div>
         </div>
       </div>
     </div>
