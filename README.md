@@ -4,15 +4,15 @@
 
 ## Tính năng AI Tư vấn (Chat)
 
-Ứng dụng có nút chat tròn ở góc dưới phải, gọi AI thật (Claude, qua Anthropic API) để trả lời câu hỏi về dinh dưỡng dựa trên hồ sơ của bạn.
+Ứng dụng có nút chat tròn ở góc dưới phải, gọi AI thật (Google Gemini — miễn phí, không cần thẻ) để trả lời câu hỏi về dinh dưỡng dựa trên hồ sơ của bạn.
 
 **Quan trọng: tính năng chat CHỈ chạy được khi deploy qua Vercel** (hoặc nền tảng hỗ trợ serverless function tương tự). GitHub Pages là hosting tĩnh, không chạy được file `api/chat.js` — trên GitHub Pages, mọi tính năng khác vẫn hoạt động bình thường, riêng nút chat sẽ báo lỗi kết nối.
 
 ### Cách bật chat khi deploy Vercel
 
-1. Tạo API key tại [console.anthropic.com](https://console.anthropic.com) (mục API Keys).
+1. Lấy API key **miễn phí** tại [aistudio.google.com/apikey](https://aistudio.google.com/apikey) (đăng nhập bằng tài khoản Google, không cần thẻ ngân hàng).
 2. Trong Vercel, vào **Project Settings → Environment Variables**, thêm:
-   - Name: `ANTHROPIC_API_KEY`
+   - Name: `GEMINI_API_KEY`
    - Value: (dán API key vừa tạo)
 3. Deploy lại (Vercel → Deployments → Redeploy) để biến môi trường có hiệu lực.
 
@@ -27,7 +27,7 @@ vercel dev
 
 Tạo file `.env.local` ở gốc dự án với nội dung:
 ```
-ANTHROPIC_API_KEY=sk-ant-...
+GEMINI_API_KEY=AIza...
 ```
 
 Rồi mở link `vercel dev` hiện ra để test — lúc này cả app lẫn chat đều chạy được ở local.

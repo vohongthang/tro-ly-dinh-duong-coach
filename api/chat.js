@@ -1,8 +1,11 @@
 // api/chat.js
-// Vercel Serverless Function — chạy trên server, KHÔNG lộ ANTHROPIC_API_KEY ra trình duyệt.
-// Cần thiết lập biến môi trường ANTHROPIC_API_KEY trong Vercel Project Settings > Environment Variables.
+// Vercel Serverless Function — chạy trên server, KHÔNG lộ GEMINI_API_KEY ra trình duyệt.
+// Cần thiết lập biến môi trường GEMINI_API_KEY trong Vercel Project Settings > Environment Variables.
+// Lấy key miễn phí, không cần thẻ, tại: https://aistudio.google.com/apikey
 // Lưu ý: chức năng này CHỈ hoạt động khi deploy qua Vercel (hoặc nền tảng có hỗ trợ serverless function).
 // GitHub Pages là hosting tĩnh, không chạy được file này.
+
+const GEMINI_MODEL = "gemini-2.0-flash"; // nằm trong danh sách model miễn phí của Gemini API
 
 export default async function handler(req, res) {
   if (req.method !== "POST") {
@@ -10,9 +13,9 @@ export default async function handler(req, res) {
     return;
   }
 
-  const apiKey = process.env.ANTHROPIC_API_KEY;
+  const apiKey = process.env.GEMINI_API_KEY;
   if (!apiKey) {
-    res.status(500).json({ error: "Server chưa cấu hình ANTHROPIC_API_KEY. Vào Vercel Project Settings > Environment Variables để thêm." });
+    res.status(500).json({ error: "Server chưa cấu hình GEMINI_API_KEY. Vào Vercel Project Settings > Environment Variables để thêm." });
     return;
   }
 
@@ -28,21 +31,27 @@ export default async function handler(req, res) {
 
   const systemPrompt = buildSystemPrompt(profile);
 
+  const contents = messages.map((m) => ({
+    role: m.role === "assistant" ? "model" : "user",
+    parts: [{ text: m.content }],
+  }));
+
   try {
-    const upstream = await fetch("https://api.anthropic.com/v1/messages", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        "x-api-key": apiKey,
-        "anthropic-version": "2023-06-01",
-      },
-      body: JSON.stringify({
-        model: "claude-sonnet-4-6",
-        max_tokens: 700,
-        system: systemPrompt,
-        messages: messages.map((m) => ({ role: m.role, content: m.content })),
-      }),
-    });
+    const upstream = await fetch(
+      `https://generativelanguage.googleapis.com/v1beta/models/${GEMINI_MODEL}:generateContent`,
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "x-goog-api-key": apiKey,
+        },
+        body: JSON.stringify({
+          system_instruction: { parts: [{ text: systemPrompt }] },
+          contents,
+          generationConfig: { maxOutputTokens: 700 },
+        }),
+      }
+    );
 
     const data = await upstream.json();
 
@@ -51,12 +60,11 @@ export default async function handler(req, res) {
       return;
     }
 
-    const reply = (data.content || [])
-      .filter((block) => block.type === "text")
-      .map((block) => block.text)
+    const reply = (data.candidates?.[0]?.content?.parts || [])
+      .map((p) => p.text || "")
       .join("\n");
 
-    res.status(200).json({ reply });
+    res.status(200).json({ reply: reply || "(Không có phản hồi)" });
   } catch (err) {
     res.status(500).json({ error: "Không kết nối được tới AI: " + err.message });
   }
