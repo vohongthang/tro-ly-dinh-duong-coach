@@ -12,10 +12,12 @@ export default function HealthCard({ profile }) {
           <div>
             <div className="text-2xl font-bold text-stone-800">{profile.bmi}</div>
             <div className="text-xs text-stone-500">BMI — {profile.bmiLabel}</div>
+            <div className="text-[11px] text-stone-400 mt-1">Chỉ số khối cơ thể = Cân nặng / Chiều cao². Ước tính mức cân đối chung, chưa phân biệt cơ và mỡ.</div>
           </div>
           <div>
             <div className={`text-2xl font-bold ${profile.highRisk ? "text-red-600" : "text-emerald-700"}`}>{profile.whtr}</div>
             <div className="text-xs text-stone-500">Tỷ lệ Eo/Cao (WHtR)</div>
+            <div className="text-[11px] text-stone-400 mt-1">= Vòng eo / Chiều cao. Từ 0,5 trở lên là ngưỡng cần lưu ý về mỡ vùng bụng.</div>
           </div>
         </div>
         {profile.highRisk ? (

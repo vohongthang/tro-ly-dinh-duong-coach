@@ -8,9 +8,20 @@ export default function ProfileSetup({ onSubmit, initialForm }) {
     initialForm || { name: "", age: "", gender: "nam", height: "", weight: "", waist: "", goal: "giu", pal: 1.55 }
   );
 
+  const [error, setError] = useState("");
+
   function handleSubmit(e) {
     e.preventDefault();
-    if (!form.age || !form.height || !form.weight || !form.waist) return;
+    const age = parseFloat(form.age), height = parseFloat(form.height), weight = parseFloat(form.weight), waist = parseFloat(form.waist);
+    if (!age || !height || !weight || !waist) {
+      setError("Vui lòng nhập đầy đủ Tuổi, Chiều cao, Cân nặng, Vòng eo.");
+      return;
+    }
+    if (age < 10 || age > 100) return setError("Tuổi nên trong khoảng 10–100.");
+    if (height < 100 || height > 230) return setError("Chiều cao nên trong khoảng 100–230cm.");
+    if (weight < 25 || weight > 250) return setError("Cân nặng nên trong khoảng 25–250kg.");
+    if (waist < 40 || waist > 200) return setError("Vòng eo nên trong khoảng 40–200cm.");
+    setError("");
     onSubmit(form);
   }
 
@@ -36,7 +47,7 @@ export default function ProfileSetup({ onSubmit, initialForm }) {
         <div className="grid grid-cols-2 gap-3 mb-4">
           <div>
             <label className="block text-sm font-medium text-stone-700 mb-1.5">Tuổi</label>
-            <input type="number" value={form.age} onChange={(e) => setForm({ ...form, age: e.target.value })} placeholder="30"
+            <input type="number" min="10" max="100" value={form.age} onChange={(e) => setForm({ ...form, age: e.target.value })} placeholder="30"
               className="w-full px-3 py-2.5 border border-stone-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500" />
           </div>
           <div>
@@ -53,17 +64,17 @@ export default function ProfileSetup({ onSubmit, initialForm }) {
         <div className="grid grid-cols-3 gap-3 mb-4">
           <div>
             <label className="block text-sm font-medium text-stone-700 mb-1.5">Cao (cm)</label>
-            <input type="number" value={form.height} onChange={(e) => setForm({ ...form, height: e.target.value })} placeholder="170"
+            <input type="number" min="100" max="230" value={form.height} onChange={(e) => setForm({ ...form, height: e.target.value })} placeholder="170"
               className="w-full px-3 py-2.5 border border-stone-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500" />
           </div>
           <div>
             <label className="block text-sm font-medium text-stone-700 mb-1.5">Nặng (kg)</label>
-            <input type="number" value={form.weight} onChange={(e) => setForm({ ...form, weight: e.target.value })} placeholder="65"
+            <input type="number" min="25" max="250" value={form.weight} onChange={(e) => setForm({ ...form, weight: e.target.value })} placeholder="65"
               className="w-full px-3 py-2.5 border border-stone-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500" />
           </div>
           <div>
             <label className="block text-sm font-medium text-stone-700 mb-1.5">Vòng eo (cm)</label>
-            <input type="number" value={form.waist} onChange={(e) => setForm({ ...form, waist: e.target.value })} placeholder="80"
+            <input type="number" min="40" max="200" value={form.waist} onChange={(e) => setForm({ ...form, waist: e.target.value })} placeholder="80"
               className="w-full px-3 py-2.5 border border-stone-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500" />
           </div>
         </div>
@@ -95,6 +106,9 @@ export default function ProfileSetup({ onSubmit, initialForm }) {
           </div>
         </div>
 
+        {error && (
+          <div className="mb-3 text-xs text-red-600 bg-red-50 border border-red-200 rounded-lg px-3 py-2">{error}</div>
+        )}
         <button type="submit" className="w-full py-3 bg-emerald-600 hover:bg-emerald-700 text-white font-semibold rounded-lg text-sm">
           Đánh giá &amp; bắt đầu theo dõi
         </button>
