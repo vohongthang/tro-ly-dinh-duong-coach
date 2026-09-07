@@ -19,6 +19,7 @@ import DateNav from "./components/DateNav.jsx";
 import MealLog from "./components/MealLog.jsx";
 import FoodModal from "./components/FoodModal.jsx";
 import MealPlanModal from "./components/MealPlanModal.jsx";
+import ChatCoach from "./components/ChatCoach.jsx";
 
 function pickTip(pool, profile) {
   return pool[Math.floor(Math.random() * pool.length)](profile);
@@ -188,6 +189,8 @@ export default function App() {
           onSaveCustomFood={handleSaveCustomFood}
         />
       )}
+
+      <ChatCoach profile={profile} />
     </div>
   );
 }

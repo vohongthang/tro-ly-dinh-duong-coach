@@ -2,6 +2,36 @@
 
 Ứng dụng cá nhân theo dõi Calo/Macro, đánh giá nguy cơ mỡ nội tạng (BMI, WHtR), gợi ý thực đơn và lời khuyên hàng ngày. Dữ liệu lưu hoàn toàn trên trình duyệt (LocalStorage) — không cần server/database.
 
+## Tính năng AI Tư vấn (Chat)
+
+Ứng dụng có nút chat tròn ở góc dưới phải, gọi AI thật (Claude, qua Anthropic API) để trả lời câu hỏi về dinh dưỡng dựa trên hồ sơ của bạn.
+
+**Quan trọng: tính năng chat CHỈ chạy được khi deploy qua Vercel** (hoặc nền tảng hỗ trợ serverless function tương tự). GitHub Pages là hosting tĩnh, không chạy được file `api/chat.js` — trên GitHub Pages, mọi tính năng khác vẫn hoạt động bình thường, riêng nút chat sẽ báo lỗi kết nối.
+
+### Cách bật chat khi deploy Vercel
+
+1. Tạo API key tại [console.anthropic.com](https://console.anthropic.com) (mục API Keys).
+2. Trong Vercel, vào **Project Settings → Environment Variables**, thêm:
+   - Name: `ANTHROPIC_API_KEY`
+   - Value: (dán API key vừa tạo)
+3. Deploy lại (Vercel → Deployments → Redeploy) để biến môi trường có hiệu lực.
+
+### Test chat ở máy local
+
+Chat cần chạy qua serverless function nên **không** dùng được với `npm run dev` (Vite thường). Cần cài Vercel CLI:
+
+```bash
+npm install -g vercel
+vercel dev
+```
+
+Tạo file `.env.local` ở gốc dự án với nội dung:
+```
+ANTHROPIC_API_KEY=sk-ant-...
+```
+
+Rồi mở link `vercel dev` hiện ra để test — lúc này cả app lẫn chat đều chạy được ở local.
+
 ## Cấu trúc dự án
 
 ```
@@ -21,9 +51,12 @@ src/
     MealLog.jsx        4 bữa ăn trong ngày
     FoodModal.jsx      Thêm món (tìm kiếm/tự thêm/nhập gram)
     MealPlanModal.jsx  Thực đơn gợi ý + áp dụng vào nhật ký
+    ChatCoach.jsx      Chat với AI tư vấn (gọi api/chat.js)
   App.jsx              Gắn kết toàn bộ, quản lý state + đồng bộ LocalStorage
   main.jsx             Điểm khởi chạy React
   index.css            Nạp Tailwind
+api/
+  chat.js              Serverless function (Vercel) — proxy gọi Anthropic API, giữ key an toàn ở server
 ```
 
 ## Chạy thử ở máy local
